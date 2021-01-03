@@ -1,119 +1,55 @@
 import React from 'react';
 import { Text, View, Button, FlatList, Image, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import AwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import SearchBar from '../components/SearchBar';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import RenderItem from '../components/RenderItem';
 
-const DATA = [
-    {
-        id: 1,
-        image: require('../asserts/food.jpg'),
-        star: "4.5 stars",
-        review: "3 views"
-    },
-    {
-        id: 2,
-        image: require('../asserts/food_1.jpg'),
-        star: "3.5 stars",
-        review: "3 views"
-    },
-    {
-        id: 3,
-        image: require('../asserts/food_2.jpg'),
-        star: "3 stars",
-        review: "3 views"
-    },
-];
+// api trả về có field là price
+//dùng hàm filter trên mảng dữ liệu api trả về dựa trên price
+
+const apiKey = 'MMMQuWnLGwlTYdSMtKujs774rvSF8-g78jwHgo35nIoahZ1df13ph_HxFOTGIpGD-_CVpb--RMaPA2clqd8koS8x58EPk6H9fkhW791Uws_LRizh44UyVyGh4feNX3Yx';
 
 export default function MainSrceen({ navigation }) {
+    const [data, setData] = useState([]);
+    const [term,setTerm] = useState('');
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+    const getData = async (term) => {
+        const data = await axios.get('https://api.yelp.com/v3/businesses/search', {
+            params: {
+                term: term,
+                location: 'Texas'
+            },
+            headers: {
+                Authorization: 'Bearer ' + apiKey
+            }
+        })
+        console.log(data.data.businesses)
+        setData(data.data.businesses)
+
+    }
+
+    const filterByPrice = (price) => {
+        return data.filter(e => e.price === price);
+    }
+
     return (
         <ScrollView style={{ flex: 1 }}>
-            <View style={{alignItems:'center'}}>
-                <AwesomeIcon style={{right:120,top:36,zIndex:99}} name="search" size={30} color="#fff" />
-                <TextInput placeholder="Search" style={Style.searchButton}></TextInput>
-            </View>
 
-            <View>
-                <Text style={Style.styleText}>Cost Effective</Text>
-                <FlatList
-                    horizontal
-                    data={DATA}
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={e => e.id}
-                    renderItem={({ item }) => {
-                        return (
-                            <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-                                <View style={Style.iamgeView}>
-                                    <Image source={item.image} />
-                                    <Text>{item.star}-{item.review}</Text>
-                                </View>
-                            </TouchableOpacity>
-
-                        )
-                    }}
-                />
-            </View>
-
-
-            <View>
-                <Text style={Style.styleText}>Bit Pricer</Text>
-                <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    data={DATA}
-                    keyExtractor={e => e.id}
-                    renderItem={({ item }) => {
-                        return (
-                            <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-                                <View style={Style.iamgeView}>
-                                    <Image source={item.image} />
-                                    <Text>{item.star}-{item.review}</Text>
-                                </View>
-                            </TouchableOpacity>
-
-                        )
-                    }}
-                />
-            </View>
-
-            <View>
-                <Text style={Style.styleText}>Big Spender!</Text>
-                <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    data={DATA}
-                    keyExtractor={e => e.id}
-                    renderItem={({ item }) => {
-                        return (
-                            <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-                                <View style={Style.iamgeView}>
-                                    <Image source={item.image} />
-                                </View>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
-            </View>
-
+            <SearchBar 
+                term={term}
+                onTermChange={(text) =>setTerm(text)}
+                onTermSubmit={() => getData(term)}
+            />
+            <RenderItem navigation={navigation} DATA={filterByPrice('$')} title="Cost Effective" />
+            <RenderItem navigation={navigation}  DATA={filterByPrice('$$')} title="Bit Pricer" />
+            <RenderItem navigation={navigation}  DATA={filterByPrice('$$$')} title="Big Spender!" />
         </ScrollView>
     )
 }
 
-const Style = StyleSheet.create({
-    iamgeView: {
-        marginLeft: 20
-    },
-    styleText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        margin: 20
-    },
-    searchButton:{
-        width:300,
-        height:40,
-        borderWidth:1,
-        backgroundColor:'gray',
-        paddingLeft:100,
-        borderRadius:8,
-        borderColor:'white'
-    }
-})

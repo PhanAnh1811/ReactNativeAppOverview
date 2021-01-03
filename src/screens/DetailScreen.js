@@ -1,39 +1,23 @@
 import React from 'react';
-import { View, FlatList, Image, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet,Image,Text } from 'react-native';
+import ResultsDetail from '../components/ResultsDetail'
 
-const DATA = [
-    {
-        id: 1,
-        image: require('../asserts/food.jpg'),
-    },
-    {
-        id: 2,
-        image: require('../asserts/food_1.jpg'),
-    },
-    {
-        id: 3,
-        image: require('../asserts/food_2.jpg'),
-    },
-];
 
-export default function DetailScreen() {
+export default function DetailScreen(data) {
+    const item = data.route.params.product;
+
     return (
         <View>
-            <FlatList
-                data={DATA}
-                keyExtractor={e => e.id}
-                renderItem={({ item }) => {
-                    return (
-                        <Image source={item.image} style={Style.imageView} />
-                    )
-                }}
-            />
+           <Image style={Style.image} source={{uri:item.image_url}}/>
+           <Text>{item.rating} Stars - {item.review_count} Reviews</Text>
         </View>
     )
 };
 
 const Style = StyleSheet.create({
-    imageView: {
-        margin:20
+    image:{
+        width:100,
+        height:100,
+        margin:30
     },
 });
