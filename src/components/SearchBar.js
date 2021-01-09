@@ -7,7 +7,7 @@ export default function SearchBar({term,onTermChange,onTermSubmit}) {
         <View style={{alignItems:'center'}}>
                 <AwesomeIcon
                 onPress={onTermSubmit}
-                 style={{right:120,top:36,zIndex:99,backgroundColor:'red'}} name="search" size={30} color="#fff" />
+                 style={{right:120,top:36,zIndex:99}} name="search" size={30} color="#fff" />
                 <TextInput
                  placeholder="Search" style={Style.searchButton} 
                  value={term}
