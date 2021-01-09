@@ -1,7 +1,5 @@
 import React from 'react';
 import { View, FlatList, StyleSheet,Image,Text } from 'react-native';
-import ResultsDetail from '../components/ResultsDetail'
-
 
 export default function DetailScreen(data) {
     const item = data.route.params.product;

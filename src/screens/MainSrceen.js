@@ -14,7 +14,6 @@ const apiKey = 'MMMQuWnLGwlTYdSMtKujs774rvSF8-g78jwHgo35nIoahZ1df13ph_HxFOTGIpGD
 export default function MainSrceen({ navigation }) {
     const [data, setData] = useState([]);
     const [term,setTerm] = useState('');
-
     useEffect(() => {
         getData()
     }, [])
