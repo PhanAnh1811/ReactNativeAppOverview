@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text, View, Button, FlatList, Image, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import SearchBar from '../components/SearchBar';
 import axios from 'axios';
@@ -28,7 +27,6 @@ export default function MainSrceen({ navigation }) {
                 Authorization: 'Bearer ' + apiKey
             }
         })
-        console.log(data.data.businesses)
         setData(data.data.businesses)
 
     }
