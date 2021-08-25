@@ -13,7 +13,8 @@ export default function RenderItem({ DATA, title, navigation }) {
                 keyExtractor={e => e.id}
                 renderItem={({ item }) => { 
                     return (
-                        <TouchableOpacity onPress={() => navigation.navigate('Detail', { product: item })}>
+                        <TouchableOpacity 
+                        onPress={() => navigation.navigate('Detail', { product: item })}>
                                 <ResultDetail result={item}/>
                         </TouchableOpacity>
 
